@@ -345,7 +345,11 @@ class QueryCacheBackend(object):
                                               cls.get_ordering(),
                                               result_type, db)
                 val = self.cache_backend.get(key, NotInCache(), db)
-
+            
+            # be more failsafe. if backend is down return original
+            if val is None:
+                val = NotInCache()
+            
             if not isinstance(val, NotInCache):
                 if val == no_result_sentinel:
                     val = []
